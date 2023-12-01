@@ -1,0 +1,14 @@
+E:\Work\LAMovies\LAMovies_BE\Libs\bin\Debug\net7.0\Libs.deps.json
+E:\Work\LAMovies\LAMovies_BE\Libs\bin\Debug\net7.0\Libs.runtimeconfig.json
+E:\Work\LAMovies\LAMovies_BE\Libs\bin\Debug\net7.0\Libs.dll
+E:\Work\LAMovies\LAMovies_BE\Libs\bin\Debug\net7.0\Libs.pdb
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.csproj.AssemblyReference.cache
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.GeneratedMSBuildEditorConfig.editorconfig
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.AssemblyInfoInputs.cache
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.AssemblyInfo.cs
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.csproj.CoreCompileInputs.cache
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.dll
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\refint\Libs.dll
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.pdb
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\Libs.genruntimeconfig.cache
+E:\Work\LAMovies\LAMovies_BE\Libs\obj\Debug\net7.0\ref\Libs.dll
