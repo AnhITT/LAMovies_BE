@@ -24,7 +24,20 @@ namespace LAMovies_BE.Controllers
             var actors = _actorRepository.getAll();
             return Ok(actors);
         }
-
+        [HttpGet]
+        [Route("GetMovieByActor")]
+        public ActionResult<IEnumerable<Movie>> GetMovieByActor(int id)
+        {
+            try
+            {
+                var data = _actorRepository.getAllMovieByActor(id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
         [HttpGet]
         [Route("GetActorById")]
         public ActionResult<Actor> GetActorById(int id)
@@ -62,7 +75,7 @@ namespace LAMovies_BE.Controllers
                     return NotFound("Actor not found");
                 }
 
-                existingActor.Name = actor.Name; // Update other properties as needed
+                existingActor.Name = actor.Name;
                 existingActor.Avarta = actor.Avarta;
                 existingActor.Description = actor.Description;
                 _actorRepository.UpdateActor(existingActor);

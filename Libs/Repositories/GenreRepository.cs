@@ -24,7 +24,10 @@ namespace Libs.Repositories
         {
             return _dbContext.Genres.ToList();
         }
-
+        public List<Movie> getAllMovieByGenre(int idGenres)
+        {
+            return _dbContext.MovieGenres.Where(g => g.IdGenre == idGenres).Select(m => m.Movie).ToList();
+        }
         public IEnumerable<Actor> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<Actor>, IOrderedQueryable<Actor>> oderBy = null, int skip = 0, int take = 0)
         {
             throw new NotImplementedException();

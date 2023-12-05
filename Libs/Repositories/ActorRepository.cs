@@ -51,5 +51,9 @@ namespace Libs.Repositories
                 return user;
             throw new Exception("ActorID not found in Room!");
         }
+        public List<Movie> getAllMovieByActor(int idActor)
+        {
+            return _dbContext.MovieActors.Where(g => g.IdActor == idActor).Select(m => m.Movie).ToList();
+        }
     }
 }

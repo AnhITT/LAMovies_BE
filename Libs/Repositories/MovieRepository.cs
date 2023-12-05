@@ -47,7 +47,11 @@ namespace Libs.Repositories
                 return data;
             throw new Exception("Movie not found");
         }
-
+        public List<Movie> GetTop6MovieView()
+        {
+            var topMovies = _dbContext.Movies.OrderByDescending(p => p.View).Take(8).ToList();
+            return topMovies;
+        }
         public IEnumerable<Movie> GetAll(Expression<Func<Movie, bool>> filter = null, Func<IQueryable<Movie>, IOrderedQueryable<Movie>> oderBy = null, int skip = 0, int take = 0)
         {
             throw new NotImplementedException();

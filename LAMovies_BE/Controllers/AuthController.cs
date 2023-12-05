@@ -149,6 +149,9 @@ namespace LAMovies_BE.Controllers
             {
                     new Claim("Id", user.Id),
                     new Claim("Username", user.UserName),
+                    new Claim("FullName", user.FullName),
+                    new Claim("Email", user.Email),
+                    new Claim("Date", user.DateBirthday.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString()),
             });

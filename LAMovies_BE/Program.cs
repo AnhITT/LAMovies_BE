@@ -1,12 +1,14 @@
 using LAMovies_BE.Config;
 using Libs.Data;
 using Libs.Models;
+using Libs.Dtos;
 using Libs.Repositories;
 using Libs.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,12 +72,15 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-
-
+builder.Services.AddScoped<IPricingRepository, PricingRepository>();
+//builder.Services.Configure<PayPalSettings>(Configuration.GetSection("PayPalSettings"));
 
 
 var app = builder.Build();
-
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+});
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

@@ -20,5 +20,6 @@ namespace Libs.Repositories.Interfaces
         IEnumerable<Movie> GetAll(Expression<Func<Movie, bool>> filter = null, Func<IQueryable<Movie>, IOrderedQueryable<Movie>> oderBy = null, int skip = 0, int take = 0);
         Movie GetById(object id);
         void Save();
+        List<Movie> GetTop6MovieView();
     }
 }

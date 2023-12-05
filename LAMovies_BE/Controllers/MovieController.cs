@@ -21,6 +21,20 @@ namespace LAMovies_BE.Controllers
         {
             return _movieRepository.getAll();
         }
+        [HttpGet]
+        [Route("GetTop6MovieView")]
+        public ActionResult<IEnumerable<Movie>> GetTop6MovieView()
+        {
+            try
+            {
+                var movie = _movieRepository.GetTop6MovieView();
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
         // GET: api/Movie/5
         [HttpGet]

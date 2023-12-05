@@ -18,5 +18,6 @@ namespace Libs.Repositories.Interfaces
         IEnumerable<Actor> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<Actor>, IOrderedQueryable<Actor>> oderBy = null, int skip = 0, int take = 0);
         Genre GetById(object id);
         void Save();
+        List<Movie> getAllMovieByGenre(int idGenres);
     }
 }

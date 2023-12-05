@@ -10,7 +10,7 @@ namespace Libs.Models
         public double Price { get; set; }
         public int Time { get; set; }
      
-        public ICollection<UserPricing> UserPricing { get; set; }
+        public ICollection<UserPricing>? UserPricing { get; set; }
 
     }
 }

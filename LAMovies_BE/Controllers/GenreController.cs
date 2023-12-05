@@ -22,7 +22,20 @@ namespace LAMovies_BE.Controllers
             var data = genreRepository.getAll();
             return Ok(data);
         }
-
+        [HttpGet]
+        [Route("GetMovieByGenre")]
+        public ActionResult<IEnumerable<Movie>> GetMovieByGenre(int id)
+        {
+            try
+            {
+                var data = genreRepository.getAllMovieByGenre(id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
         [HttpGet]
         [Route("GetGenreById")]
         public ActionResult<Genre> GetGenreById(int id)
