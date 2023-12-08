@@ -19,5 +19,6 @@ namespace Libs.Repositories.Interfaces
         Actor GetById(object id);
         void Save();
         List<Movie> getAllMovieByActor(int idActor);
+        int CountActor();
     }
 }

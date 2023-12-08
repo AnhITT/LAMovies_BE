@@ -21,15 +21,17 @@ namespace LAMovies_BE.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private ITokenRepository _tokenRepository;
+        private IAccountRepository _accountRepository;
         private readonly TokenValidationParameters _tokenValidationParameters;
         public AuthController(UserManager<User> userManager, IConfiguration configuration, ITokenRepository tokenRepository,
-            TokenValidationParameters tokenValidationParameters, RoleManager<IdentityRole> roleManager)
+            TokenValidationParameters tokenValidationParameters, RoleManager<IdentityRole> roleManager, IAccountRepository accountRepository)
         {
             this._userManager = userManager;
             this._configuration = configuration;
             this._tokenRepository = tokenRepository;
             this._tokenValidationParameters = tokenValidationParameters;
             this._roleManager = roleManager;
+            this._accountRepository = accountRepository;
         }
         [HttpPost]
         [Route("login")]
@@ -45,6 +47,17 @@ namespace LAMovies_BE.Controllers
                         Error = new List<string>()
                         {
                             "Username does not exist"
+                        },
+                        Result = false
+                    });
+                }
+                if (!_accountRepository.CheckStatusAccount(checkUser))
+                {
+                    return BadRequest(new AuthResult()
+                    {
+                        Error = new List<string>()
+                        {
+                            "Account has been locked"
                         },
                         Result = false
                     });
@@ -109,6 +122,7 @@ namespace LAMovies_BE.Controllers
                         DateBirthday = registerRequest.DateBirthday,
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
+                        Status = true
                     };
                     var isCreate = await _userManager.CreateAsync(newUser, registerRequest.Password);
                     if (!await _roleManager.RoleExistsAsync("User"))
@@ -152,6 +166,7 @@ namespace LAMovies_BE.Controllers
                     new Claim("FullName", user.FullName),
                     new Claim("Email", user.Email),
                     new Claim("Date", user.DateBirthday.ToString()),
+                    new Claim("Status", user.Status.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString()),
             });

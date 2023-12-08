@@ -1,7 +1,10 @@
 ﻿using Libs.Contracts;
 using Libs.Data;
+using Libs.Dtos;
 using Libs.Models;
 using Libs.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +22,14 @@ namespace Libs.Repositories
         {
             _dbContext.Users.Add(user);
         }
+        public bool CheckStatusAccount(User user)
+        {
+            if (user.Status)
+            {
+                return true;
+            }
+            return false;
+        }
         public void UpdateAccount(User user)
         {
             _dbContext.Users.Update(user);
@@ -31,12 +42,11 @@ namespace Libs.Repositories
         {
             return _dbContext.Users.ToList();
         }
-
-        public IEnumerable<User> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<User>, IOrderedQueryable<User>> oderBy = null, int skip = 0, int take = 0)
+      
+        public IEnumerable<User> GetPagedUsers(int page, int pageSize)
         {
-            throw new NotImplementedException();
+            return GetList(orderBy: q => q.OrderBy(user => user.Id), skip: (page - 1) * pageSize, take: pageSize);
         }
-
         public User GetById(object id)
         {
             User user = _dbContext.Users.Find(id);
@@ -48,6 +58,15 @@ namespace Libs.Repositories
         {
             _dbContext.SaveChanges();
         }
+        public int CountAccount()
+        {
+            return _dbContext.Users.Count();
+        }
+        public void HanldeChange(User existingUser)
+        {
+            _dbContext.Entry(existingUser).State = EntityState.Detached;
+        }
+       
     }
 }
 

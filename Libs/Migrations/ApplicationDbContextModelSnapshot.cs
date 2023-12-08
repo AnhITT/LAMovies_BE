@@ -342,6 +342,9 @@ namespace Libs.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -607,8 +610,7 @@ namespace Libs.Migrations
 
                     b.Navigation("MovieHistory");
 
-                    b.Navigation("OddMovie")
-                        .IsRequired();
+                    b.Navigation("OddMovie");
 
                     b.Navigation("SeriesMovie");
                 });

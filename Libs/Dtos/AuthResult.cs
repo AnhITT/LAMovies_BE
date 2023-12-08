@@ -12,6 +12,5 @@ namespace Libs.DTOs
         public string RefreshToken { get; set; }
         public bool Result { get; set; }
         public List<string> Error { get; set; }
-
     }
 }

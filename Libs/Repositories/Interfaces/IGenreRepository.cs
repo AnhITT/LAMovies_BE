@@ -19,5 +19,6 @@ namespace Libs.Repositories.Interfaces
         Genre GetById(object id);
         void Save();
         List<Movie> getAllMovieByGenre(int idGenres);
+        int CountGenre();
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
 using System.Text;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +75,6 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IPricingRepository, PricingRepository>();
 //builder.Services.Configure<PayPalSettings>(Configuration.GetSection("PayPalSettings"));
-
 
 var app = builder.Build();
 app.UseCors(builder =>

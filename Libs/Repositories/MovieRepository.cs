@@ -56,5 +56,9 @@ namespace Libs.Repositories
         {
             throw new NotImplementedException();
         }
+        public int CountMovie()
+        {
+            return _dbContext.Movies.Count();
+        }
     }
 }

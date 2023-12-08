@@ -21,5 +21,6 @@ namespace Libs.Repositories.Interfaces
         Movie GetById(object id);
         void Save();
         List<Movie> GetTop6MovieView();
+        int CountMovie();
     }
 }

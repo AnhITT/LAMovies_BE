@@ -55,5 +55,9 @@ namespace Libs.Repositories
         {
             return _dbContext.MovieActors.Where(g => g.IdActor == idActor).Select(m => m.Movie).ToList();
         }
+        public int CountActor()
+        {
+            return _dbContext.Actors.Count();
+        }
     }
 }

@@ -1,11 +1,15 @@
-﻿using Libs.DTOs;
+﻿using Libs.Dtos;
+using Libs.DTOs;
 using Libs.Models;
 using Libs.Repositories;
 using Libs.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
+using System.Security.Claims;
 
 namespace LAMovies_BE.Controllers
 {
@@ -22,11 +26,10 @@ namespace LAMovies_BE.Controllers
             this._accountRepository = account;
             this._userManager = userManager;
             this._roleManager = roleManager;
-
         }
 
         [HttpPost("AddAccount")]
-        public async Task<IActionResult> AddAccount([FromBody] RegistrationDTO registerRequest)
+        public async Task<IActionResult> AddAccount([FromBody] AccountDTO registerRequest)
         {
             if (ModelState.IsValid)
             {
@@ -56,13 +59,11 @@ namespace LAMovies_BE.Controllers
                         DateBirthday = registerRequest.DateBirthday,
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
+                        Status = true
                     };
                     var isCreate = await _userManager.CreateAsync(newUser, registerRequest.Password);
-                    if (!await _roleManager.RoleExistsAsync("User"))
-                        await _roleManager.CreateAsync(new IdentityRole("User"));
-                    if (await _roleManager.RoleExistsAsync("User"))
-                        await _userManager.AddToRoleAsync(newUser, "User");
-                    return Ok("Tạo tài khoản thành công");
+                    await _userManager.AddToRoleAsync(newUser, registerRequest.Role);
+                    return Ok(newUser);
                 }
                 else
                 {
@@ -84,19 +85,29 @@ namespace LAMovies_BE.Controllers
             });
         }
 
-        [HttpPut("UpdateAccount/{id}")]
-        public IActionResult UpdateAccount(string id, [FromBody] User user)
+        [HttpPatch("UpdateAccount")]
+        public async Task<IActionResult> UpdateAccount([FromBody] AccountShowDTo updatedUser)
         {
             try
             {
-                User existingUser = _accountRepository.GetById(id);
-
+                User existingUser = await _userManager.FindByIdAsync(updatedUser.Id);
                 if (existingUser == null)
                 {
                     return NotFound("User not found");
                 }
+                _accountRepository.HanldeChange(existingUser);
 
-                existingUser.UserName = user.UserName; // Update other properties as needed
+                existingUser.DateBirthday = updatedUser.DateBirthday;
+                existingUser.Email = updatedUser.Email;
+                existingUser.FullName = updatedUser.FullName;
+                existingUser.Status = updatedUser.Status;
+
+                var existingRoles = await _userManager.GetRolesAsync(existingUser);
+                await _userManager.RemoveFromRolesAsync(existingUser, existingRoles);
+                foreach (var role in updatedUser.Role)
+                {
+                    await _userManager.AddToRoleAsync(existingUser, role);
+                }
                 _accountRepository.UpdateAccount(existingUser);
                 _accountRepository.Save();
 
@@ -108,6 +119,28 @@ namespace LAMovies_BE.Controllers
             }
         }
 
+        [HttpPatch("ChangeStatus")]
+        public IActionResult ChangeStatus(string id, bool status)
+        {
+            try
+            {
+                User existingUser = _accountRepository.GetById(id);
+
+                if (existingUser == null)
+                {
+                    return NotFound("User not found");
+                }
+                existingUser.Status = status;
+                _accountRepository.UpdateAccount(existingUser);
+                _accountRepository.Save();
+
+                return Ok("Account updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error updating account: {ex.Message}");
+            }
+        }
         [HttpDelete]
         [Route("DeleteAccount")]
         public IActionResult DeleteAccount(string id)
@@ -133,12 +166,30 @@ namespace LAMovies_BE.Controllers
         }
 
         [HttpGet("ShowAccount")]
-        public IActionResult ShowAccount()
+        public async Task<IActionResult> ShowAccount()
         {
             try
             {
                 List<User> users = _accountRepository.getAll();
-                return Ok(users);
+                List<AccountShowDTo> usersDTO = new List<AccountShowDTo>();
+
+                foreach (var user in users)
+                {
+                    AccountShowDTo userDTO = new AccountShowDTo
+                    {
+                        Id = user.Id,
+                        DateBirthday = user.DateBirthday,
+                        Email = user.Email,
+                        FullName = user.FullName,
+                        UserName = user.UserName,
+                        Status = user.Status,
+                        Role = (await _userManager.GetRolesAsync(user)).ToList()
+                    };
+
+                    usersDTO.Add(userDTO);
+                }
+
+                return Ok(usersDTO);
             }
             catch (Exception ex)
             {
@@ -146,9 +197,10 @@ namespace LAMovies_BE.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("DetailAccount")]
-        public IActionResult DetailAccount(string id)
+        public async Task<IActionResult> DetailAccount(string id)
         {
             try
             {
@@ -158,13 +210,55 @@ namespace LAMovies_BE.Controllers
                 {
                     return NotFound("User not found");
                 }
-
-                return Ok(user);
+                AccountShowDTo userDTO = new AccountShowDTo
+                {
+                    Id = user.Id,
+                    DateBirthday = user.DateBirthday,
+                    Email = user.Email,
+                    FullName = user.FullName,
+                    UserName = user.UserName,
+                    Status = user.Status,
+                    Role = (await _userManager.GetRolesAsync(user)).ToList()
+                };
+                return Ok(userDTO);
             }
             catch (Exception ex)
             {
                 return BadRequest($"Error retrieving account details: {ex.Message}");
             }
+        }
+
+        [HttpGet("GetPagedAccounts")]
+        public IActionResult GetPagedAccounts(int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                // Sử dụng phương thức GetPagedUsers từ AccountRepository để lấy danh sách người dùng phân trang
+                var pagedUsers = _accountRepository.GetPagedUsers(page, pageSize);
+
+                // Lấy tổng số lượng người dùng để tính toán số trang
+                var totalUserCount = _accountRepository.getAll().Count();
+                var totalPage = (int)Math.Ceiling(totalUserCount / (double)pageSize);
+                // Trả về kết quả
+                return Ok(new
+                {
+                    TotalCount = totalUserCount,
+                    PageSize = pageSize,
+                    CurrentPage = page,
+                    TotalPage = totalPage,
+                    Users = pagedUsers
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving paged accounts: {ex.Message}");
+            }
+        }
+        [HttpGet("getAllRoles")]
+        public async Task<ActionResult<IEnumerable<string>>> GetAllRoles()
+        {
+            var roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+            return Ok(roles);
         }
     }
 }

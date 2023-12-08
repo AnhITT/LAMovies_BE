@@ -1,4 +1,5 @@
-﻿using Libs.Models;
+﻿using Libs.Dtos;
+using Libs.Models;
 using Libs.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,18 @@ namespace LAMovies_BE.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IActorRepository _actorRepository;
+        private readonly IGenreRepository _genreRepository;
 
-        public MovieController(IMovieRepository movieRepository)
+
+        public MovieController(IMovieRepository movieRepository, IAccountRepository accountRepository,
+           IActorRepository actorRepository, IGenreRepository genreRepository)
         {
             _movieRepository = movieRepository;
+            _accountRepository = accountRepository;
+            _actorRepository = actorRepository;
+             _genreRepository = genreRepository;
         }
 
         [HttpGet]
@@ -35,7 +44,24 @@ namespace LAMovies_BE.Controllers
                 return NotFound(ex.Message);
             }
         }
-
+        [HttpGet]
+        [Route("ThongKe")]
+        public ActionResult<ThongKeDTO> ThongKe()
+        {
+            try
+            {
+                var data = new ThongKeDTO();
+                data.countMovies = _movieRepository.CountMovie();
+                data.countAccount = _accountRepository.CountAccount();
+                data.countActor = _actorRepository.CountActor();
+                data.countGenre = _genreRepository.CountGenre();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
         // GET: api/Movie/5
         [HttpGet]
         [Route("GetMovieById")]

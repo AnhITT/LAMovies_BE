@@ -54,5 +54,9 @@ namespace Libs.Repositories
                 return data;
             throw new Exception("Genre not found");
         }
+        public int CountGenre()
+        {
+            return _dbContext.Genres.Count();
+        }
     }
 }

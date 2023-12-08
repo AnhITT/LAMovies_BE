@@ -1,4 +1,5 @@
 ﻿using Libs.Contracts;
+using Libs.Dtos;
 using Libs.DTOs;
 using Libs.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,11 @@ namespace Libs.Repositories.Interfaces
         void UpdateAccount(User user);
         void DeleteAccount(User user);
         List<User> getAll();
-        IEnumerable<User> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<User>, IOrderedQueryable<User>> oderBy = null, int skip = 0, int take = 0);
+        IEnumerable<User> GetPagedUsers(int page, int pageSize);
         User GetById(object id);
         void Save();
+        bool CheckStatusAccount(User user);
+        int CountAccount();
+        void HanldeChange(User existingUser);
     }
 }
