@@ -74,6 +74,8 @@ builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IPricingRepository, PricingRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 //builder.Services.Configure<PayPalSettings>(Configuration.GetSection("PayPalSettings"));
 
 var app = builder.Build();

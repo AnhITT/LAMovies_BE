@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,13 +23,19 @@ namespace Libs.Repositories
 
         public List<Movie> getAll()
         {
-            return _dbContext.Movies.ToList();
+            var movies = _dbContext.Movies.ToList();
+            DisplayToMovie(movies);
+            return movies;
         }
 
 
         public void Insert(Movie data)
         {
             _dbContext.Movies.Add(data);
+            _dbContext.SaveChanges();
+            AddMovieToGenre(data);
+            AddMovieToActor(data);
+            _dbContext.SaveChanges();
         }
 
         public void Save()
@@ -59,6 +66,86 @@ namespace Libs.Repositories
         public int CountMovie()
         {
             return _dbContext.Movies.Count();
+        }
+        public OddMovie GetURLOddMovie(int id)
+        {
+            var item = _dbContext.OddMovies.FirstOrDefault(m => m.IdMovie == id);
+            return item;
+        }
+
+        public List<SeriesMovie> GetURLSeriesMovies(int id)
+        {
+            var item = _dbContext.SeriesMovies.Where(m => m.IdMovie == id).ToList();
+            return item;
+        }
+        public string Top1Movie()
+        {
+            var topMovie = _dbContext.Movies.OrderByDescending(p => p.View).FirstOrDefault();
+            return topMovie.Name;
+        }
+        public int CountMovieOdd()
+        {
+            return _dbContext.Movies.Count(m => m.Type == "oddMovies");
+        }
+        public int CountMovieSeries()
+        {
+            return _dbContext.Movies.Count(m => m.Type == "seriesMovies");
+        }
+        public void DisplayToMovie(List<Movie> list)
+        {
+            foreach (var movie in list)
+            {
+                var genres = (from genre in _dbContext.Genres
+                              join table in _dbContext.MovieGenres
+                              on genre.Id equals table.IdGenre
+                              where table.IdMovie == movie.Id
+                              select genre.Name
+                              ).ToList();
+                movie.GenreNames = genres;
+            }
+            foreach (var movie in list)
+            {
+                var actors = (from actor in _dbContext.Actors
+                              join table in _dbContext.MovieActors
+                              on actor.Id equals table.IdActor
+                              where table.IdMovie == movie.Id
+                              select actor.Name
+                              ).ToList();
+                movie.ActorNames = actors;
+            }
+        }
+        public void AddMovieToGenre(Movie model)
+        {
+            foreach (int genreId in model.Genres)
+            {
+                var movieGenre = new MovieGenre
+                {
+                    IdMovie = model.Id,
+                    IdGenre = genreId
+                };
+                _dbContext.MovieGenres.Add(movieGenre);
+            }
+        }
+        public void AddMovieToActor(Movie model)
+        {
+            foreach (int actorId in model.Actor)
+            {
+                var movieActor = new MovieActor
+                {
+                    IdMovie = model.Id,
+                    IdActor = actorId
+                };
+                _dbContext.MovieActors.Add(movieActor);
+            }
+        }
+        public List<Movie> HistoryMovieByUser(string userId)
+        {
+            List<MovieHistory> movieHistories = _dbContext.MovieHistorys.Where(up => up.IdUser == userId).ToList();
+            var movies = from h in movieHistories
+                         join m in _dbContext.Movies on h.IdMovie equals m.Id
+                         orderby h.DateTimeWatch descending
+                         select m;
+            return movies.ToList();
         }
     }
 }

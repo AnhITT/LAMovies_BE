@@ -22,5 +22,13 @@ namespace Libs.Repositories.Interfaces
         void Save();
         List<Movie> GetTop6MovieView();
         int CountMovie();
+        OddMovie GetURLOddMovie(int id);
+        List<SeriesMovie> GetURLSeriesMovies(int id);
+        string Top1Movie();
+
+        int CountMovieOdd();
+
+        int CountMovieSeries();
+        List<Movie> HistoryMovieByUser(string userId);
     }
 }

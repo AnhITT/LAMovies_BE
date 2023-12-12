@@ -84,6 +84,31 @@ namespace LAMovies_BE.Controllers
                 Result = false
             });
         }
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO passwordDTO)
+        {
+            try
+            {
+                User user = await _userManager.FindByIdAsync(passwordDTO.Id);
+                _accountRepository.HanldeChange(user);
+
+                if (user == null)
+                {
+                    return BadRequest("No User");
+
+                }
+                else if(!await _userManager.CheckPasswordAsync(user, passwordDTO.Password))
+                {
+                    return BadRequest("Invalid Password");
+                }
+                var result = await _userManager.ChangePasswordAsync(user, passwordDTO.Password, passwordDTO.NewPassword);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error updating account: {ex.Message}");
+            }
+        }
 
         [HttpPatch("UpdateAccount")]
         public async Task<IActionResult> UpdateAccount([FromBody] AccountShowDTo updatedUser)

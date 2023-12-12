@@ -8,7 +8,7 @@ namespace Libs.Dtos
 {
     public class ThongKeDTO
     {
-        public int top1Movie { get; set; }
+        public string top1Movie { get; set; }
         public int countMovies { get; set; }
         public int countMoviesOdd { get; set; }
         public int countMoviesSeries { get; set; }
