@@ -24,8 +24,8 @@ namespace Libs.Data
         public DbSet<MovieHistory>? MovieHistorys { get; set; }
         public DbSet<OddMovie>? OddMovies { get; set; }
         public DbSet<SeriesMovie>? SeriesMovies { get; set; }
-
-
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<UserInRoom> UserInRooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Libs.Repositories.Interfaces
 {
-    public interface IGenreRepository : IRepositoryBase<Actor>
+    public interface IGenreRepository : IRepositoryBase<Genre>
     {
         void Insert(Genre data);
         void Update(Genre data);
         void Delete(Genre data);
         List<Genre> getAll();
-        IEnumerable<Actor> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<Actor>, IOrderedQueryable<Actor>> oderBy = null, int skip = 0, int take = 0);
+        IEnumerable<Genre> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<Genre>, IOrderedQueryable<Genre>> oderBy = null, int skip = 0, int take = 0);
         Genre GetById(object id);
         void Save();
         List<Movie> getAllMovieByGenre(int idGenres);

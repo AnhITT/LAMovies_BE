@@ -1,5 +1,3 @@
-E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\appsettings.Development.json
-E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\appsettings.json
 E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\LAMovies_BE.exe
 E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\LAMovies_BE.deps.json
 E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\LAMovies_BE.runtimeconfig.json
@@ -265,3 +263,6 @@ E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\tr\Microsoft.CodeAnaly
 E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\PayPal.dll
+E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\libman.json
+E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\appsettings.Development.json
+E:\Work\LAMovies\LAMovies_BE\LAMovies_BE\bin\Debug\net7.0\appsettings.json

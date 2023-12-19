@@ -11,9 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
+using LAMovies_BE.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -75,6 +76,9 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IPricingRepository, PricingRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IUserInRoomRepository, UserInRoomRepository>();
+
 
 //builder.Services.Configure<PayPalSettings>(Configuration.GetSection("PayPalSettings"));
 
@@ -87,6 +91,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHub<NotificationHub>("/chatHub");
+app.MapHub<MeetHub>("/metting");
 
 app.MapControllers();
 

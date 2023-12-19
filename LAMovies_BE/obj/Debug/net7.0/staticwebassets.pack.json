@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "E:\\Work\\LAMovies\\LAMovies_BE\\LAMovies_BE\\wwwroot\\js\\signalr\\dist\\browser\\signalr.js",
+      "PackagePath": "staticwebassets\\js\\signalr\\dist\\browser\\signalr.js"
+    },
+    {
+      "Id": "E:\\Work\\LAMovies\\LAMovies_BE\\LAMovies_BE\\wwwroot\\js\\signalr\\dist\\browser\\signalr.min.js",
+      "PackagePath": "staticwebassets\\js\\signalr\\dist\\browser\\signalr.min.js"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.LAMovies_BE.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.LAMovies_BE.props",
+      "PackagePath": "build\\LAMovies_BE.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.LAMovies_BE.props",
+      "PackagePath": "buildMultiTargeting\\LAMovies_BE.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.LAMovies_BE.props",
+      "PackagePath": "buildTransitive\\LAMovies_BE.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

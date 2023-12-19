@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Libs.Repositories
 {
-    public class GenreRepository : RepositoryBase<Actor>, IGenreRepository
+    public class GenreRepository : RepositoryBase<Genre>, IGenreRepository
     {
         public GenreRepository(ApplicationDbContext dBContext) : base(dBContext) { }
 
@@ -28,11 +28,6 @@ namespace Libs.Repositories
         {
             return _dbContext.MovieGenres.Where(g => g.IdGenre == idGenres).Select(m => m.Movie).ToList();
         }
-        public IEnumerable<Actor> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<Actor>, IOrderedQueryable<Actor>> oderBy = null, int skip = 0, int take = 0)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Insert(Genre data)
         {
             _dbContext.Genres.Add(data);
@@ -57,6 +52,11 @@ namespace Libs.Repositories
         public int CountGenre()
         {
             return _dbContext.Genres.Count();
+        }
+
+        public IEnumerable<Genre> GetAll(Expression<Func<User, bool>> filter = null, Func<IQueryable<Genre>, IOrderedQueryable<Genre>> oderBy = null, int skip = 0, int take = 0)
+        {
+            throw new NotImplementedException();
         }
     }
 }
