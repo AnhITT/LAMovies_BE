@@ -30,5 +30,7 @@ namespace Libs.Repositories.Interfaces
 
         int CountMovieSeries();
         List<Movie> HistoryMovieByUser(string userId);
+        List<int> GetGenreByMovieId(int movieId);
+        List<int> GetActorByMovieId(int movieId);
     }
 }

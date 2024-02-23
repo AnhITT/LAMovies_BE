@@ -140,15 +140,29 @@ namespace LAMovies_BE.Controllers
             }
         }
 
-        [HttpPut]
-        public ActionResult UpdateMovie(int id, [FromBody] Movie movie)
+        [HttpPatch]
+        public ActionResult UpdateMovie([FromBody] Movie updatedMovie)
         {
             try
             {
-                var existingMovie = _movieRepository.GetById(id);
+                var existingMovie = _movieRepository.GetById(updatedMovie.Id);
                 if (existingMovie != null)
                 {
-                    existingMovie = movie;
+                    existingMovie.Name = updatedMovie.Name;
+                    existingMovie.Description = updatedMovie.Description;
+                    existingMovie.UrlTrailer = updatedMovie.UrlTrailer;
+                    existingMovie.UrlImg = updatedMovie.UrlImg;
+                    existingMovie.UrlImgCover = updatedMovie.UrlImgCover;
+                    existingMovie.SubLanguage = updatedMovie.SubLanguage;
+                    existingMovie.MinAge = updatedMovie.MinAge;
+                    existingMovie.Quality = updatedMovie.Quality;
+                    existingMovie.Time = updatedMovie.Time;
+                    existingMovie.YearCreate = updatedMovie.YearCreate;
+                    existingMovie.Type = updatedMovie.Type;
+                    existingMovie.View = updatedMovie.View;
+                    existingMovie.Episodes = updatedMovie.Episodes;
+                    existingMovie.Genres = updatedMovie.Genres;
+                    existingMovie.Actor = updatedMovie.Actor;
                     _movieRepository.Update(existingMovie);
                     _movieRepository.Save();
 
@@ -165,6 +179,22 @@ namespace LAMovies_BE.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("ShowDetail")]
+        public ActionResult<Movie> ShowDetail(int id)
+        {
+            try
+            {
+                var movie = _movieRepository.GetById(id);
+                movie.Genres = _movieRepository.GetGenreByMovieId(movie.Id);
+                movie.Actor = _movieRepository.GetActorByMovieId(movie.Id);
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
         [HttpDelete]
         public ActionResult Delete(int id)
         {

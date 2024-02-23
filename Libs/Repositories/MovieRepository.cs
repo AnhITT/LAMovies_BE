@@ -8,6 +8,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Libs.Repositories
@@ -46,6 +48,10 @@ namespace Libs.Repositories
         public void Update(Movie data)
         {
             _dbContext.Movies.Update(data);
+            UpdateMovieToGenre(data);
+            UpdateMovieToActor(data);
+            _dbContext.SaveChanges();
+
         }
         public Movie GetById(object id)
         {
@@ -138,6 +144,56 @@ namespace Libs.Repositories
                 _dbContext.MovieActors.Add(movieActor);
             }
         }
+        public void UpdateMovieToGenre(Movie model)
+        {
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+            };
+
+            var movieGenresToDelete = _dbContext.MovieGenres.Where(mg => mg.IdMovie == model.Id).ToList();
+
+            foreach (var movieGenreToDelete in movieGenresToDelete)
+            {
+                _dbContext.MovieGenres.Remove(movieGenreToDelete);
+            }
+
+            foreach (int genreId in model.Genres)
+            {
+                var movieGenre = new MovieGenre
+                {
+                    IdMovie = model.Id,
+                    IdGenre = genreId
+                };
+                _dbContext.MovieGenres.Add(movieGenre);
+            }
+
+        }
+
+        public void UpdateMovieToActor(Movie model)
+        {
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+            };
+
+            var movieActorToDeletes = _dbContext.MovieActors.Where(ma => ma.IdMovie == model.Id).ToList();
+
+            foreach (var movieActorToDelete in movieActorToDeletes)
+            {
+                _dbContext.MovieActors.Remove(movieActorToDelete);
+            }
+            foreach (int actorId in model.Actor)
+            {
+                var movieActor = new MovieActor
+                {
+                    IdMovie = model.Id,
+                    IdActor = actorId
+                };
+                _dbContext.MovieActors.Add(movieActor);
+            }
+        }
+
         public List<Movie> HistoryMovieByUser(string userId)
         {
             List<MovieHistory> movieHistories = _dbContext.MovieHistorys.Where(up => up.IdUser == userId).ToList();
@@ -147,5 +203,16 @@ namespace Libs.Repositories
                          select m;
             return movies.ToList();
         }
+        public List<int> GetGenreByMovieId(int movieId)
+        {
+            var genreIds = _dbContext.MovieGenres.Where(a => a.IdMovie == movieId).Select(a => a.IdGenre).ToList();
+            return genreIds;
+        }
+        public List<int> GetActorByMovieId(int movieId)
+        {
+            var genreIds = _dbContext.MovieActors.Where(a => a.IdMovie == movieId).Select(a => a.IdActor).ToList();
+            return genreIds;
+        }
+
     }
 }
